@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from flask import Flask
 
 app = Flask(__name__)
@@ -11,6 +11,14 @@ def home():
 def blog():
     return "Hello, from App!"
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    res = [f'<b>You want path:</b> {request.method} {request.url_root} {request.full_path}<br><br>']
+    res.append("<b>Headers</b>")
+    for k,v in request.headers.items(): 
+        res.append(f'{k:>30} : {v}')
+    return '<br>'.join(res)
 
 
 if __name__ == '__main__':
